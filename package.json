@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server.mjs"
+    "dev": "nodemon server"
   },
   "keywords": [],
   "author": "izz133",
