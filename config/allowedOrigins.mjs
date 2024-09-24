@@ -1,5 +1,6 @@
 const allowedOrigins = [
     'http://localhost:3000',
+    'https://isc-vessel-tracker.onrender.com',
     'https://www.internationalshipcare.com',
     'https://internationalshipcare.com'
 ]
