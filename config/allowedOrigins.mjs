@@ -1,8 +1,5 @@
 const allowedOrigins = [
-    'https://isc-vessel-tracker.onrender.com',
-    'http://localhost:3000',
-    'https://www.internationalshipcare.com',
-    'https://internationalshipcare.com'
+    'https://isc-vessel-tracker.onrender.com'
 ]
 
 //enter domain kalau mahu serve the app at other DNS
