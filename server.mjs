@@ -18,9 +18,12 @@ import { corsOptions } from './config/corsOptions.mjs';
 import { connectDB } from './config/dbConn.mjs';
 import mongoose from 'mongoose';
 import { logEvents } from './middleware/logger.mjs';
+
+// Routes
 import userRoutes from './routes/userRoutes.mjs';
 import noteRoutes from './routes/noteRoutes.mjs';
 import authRoutes from './routes/authRoutes.mjs';
+import vesselRoutes from './routes/vesselRoutes.mjs';
 
 // Set the port
 const PORT = process.env.PORT || 3500
@@ -49,6 +52,7 @@ app.use('/', rootRouter)
 app.use('/auth', authRoutes)
 app.use('/users', userRoutes)
 app.use('/notes', noteRoutes)
+app.use('/vessels', vesselRoutes)
 
 // Error handling for 404 (Not Found)
 app.all('*', (req, res) => {
