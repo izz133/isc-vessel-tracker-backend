@@ -24,6 +24,7 @@ import userRoutes from './routes/userRoutes.mjs';
 import noteRoutes from './routes/noteRoutes.mjs';
 import authRoutes from './routes/authRoutes.mjs';
 import vesselRoutes from './routes/vesselRoutes.mjs';
+import positionRoutes from './routes/positionRoutes.mjs';
 
 // Set the port
 const PORT = process.env.PORT || 3500
@@ -53,6 +54,7 @@ app.use('/auth', authRoutes)
 app.use('/users', userRoutes)
 app.use('/notes', noteRoutes)
 app.use('/vessels', vesselRoutes)
+app.use('/positions', positionRoutes)
 
 // Error handling for 404 (Not Found)
 app.all('*', (req, res) => {
