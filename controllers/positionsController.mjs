@@ -5,21 +5,39 @@ import Position from '../models/Position.mjs'
 // @route GET /positions
 // @access Private
 const getAllPositions = async (req, res) => {
-    // Get all positions from MongoDB
-    const positions = await Position.find().lean();
+
+    const { date } = req.query; // Get date from query parameters
+
+    let positions;
+
+    if (date) {
+        // If a date is provided, filter positions by that date
+        positions = await Position.find({ date }).populate({
+            path: 'vessel',
+            populate: { path: 'user', select: 'username' }
+        }).lean();
+    } else {
+        // If no date is specified, fetch all positions
+        positions = await Position.find()
+            .populate({
+                path: 'vessel',
+                populate: { path: 'user', select: 'username' }
+            })
+            .lean();
+    }
 
     // If no positions found
     if (!positions?.length) {
-        return res.status(400).json({ message: 'No positions found' })
+        return res.status(400).json({ message: 'No positions found' });
     }
 
     // Add vessel name to each position before sending the response
-    const positionsWithVessel = await Promise.all(positions.map(async (position) => {
-        const vessel = await Vessel.findById(position.vessel).lean().exec()
-        return { ...position, name: vessel.name } //make sure this logic true to retrive the id
-    }))
+    const positionsWithVessel = positions.map(position => ({
+        ...position,
+        name: position.vessel.name, // Directly access the populated vessel's name
+    }));
 
-    res.json(positionsWithVessel)
+    res.json(positionsWithVessel);
 }
 
 // @desc Create new position
@@ -34,10 +52,10 @@ const createNewPosition = async (req, res) => {
     }
 
     // Check for duplicate date
-    const duplicate = await Position.findOne({ date }).collation({ locale: 'en', strength: 2 }).lean().exec()
+    const duplicate = await Position.findOne({ vessel, date }).collation({ locale: 'en', strength: 2 }).lean().exec();
 
     if (duplicate) {
-        return res.status(409).json({ message: 'This date is already filled in' })
+        return res.status(409).json({ message: 'This vessel already has a position entry for this date' });
     }
 
     // Create and store the new position
@@ -68,12 +86,12 @@ const updatePosition = async (req, res) => {
         return res.status(400).json({ message: 'Position not found' })
     }
 
-    // Check for duplicate date
-    const duplicate = await Position.findOne({ date }).collation({ locale: 'en', strength: 2 }).lean().exec()
+    // Check for duplicate vessel and date
+    const duplicate = await Position.findOne({ vessel, date }).collation({ locale: 'en', strength: 2 }).lean().exec();
 
-    // Allow renaming of the original position
-    if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({ message: 'Duplicate date' })
+    // Allow update only if no other entry exists for the same vessel and date
+    if (duplicate && duplicate._id.toString() !== id) {
+        return res.status(409).json({ message: 'Another position for this vessel already exists on this date' });
     }
 
     position.vessel = vessel
@@ -82,7 +100,7 @@ const updatePosition = async (req, res) => {
 
     const updatedPosition = await position.save()
 
-    res.json({ message: `'${updatedPosition.vessel}' Position with date '${updatedPosition.date}' updated` })
+    res.json({ message: `Position for vessel '${updatedPosition.vessel}' on date '${updatedPosition.date}' has been updated` });
 }
 
 // @desc Delete a position
