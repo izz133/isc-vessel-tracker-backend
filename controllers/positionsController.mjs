@@ -1,11 +1,9 @@
-import Vessel from '../models/Vessel.mjs'
 import Position from '../models/Position.mjs'
 
 // @desc Get all positions
 // @route GET /positions
 // @access Private
 const getAllPositions = async (req, res) => {
-
     const { date } = req.query; // Get date from query parameters
 
     let positions;
