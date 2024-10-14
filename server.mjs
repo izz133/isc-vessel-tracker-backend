@@ -26,6 +26,7 @@ import authRoutes from './routes/authRoutes.mjs';
 import vesselRoutes from './routes/vesselRoutes.mjs';
 import positionRoutes from './routes/positionRoutes.mjs';
 import dhMachineRoutes from './routes/dhMachineRoutes.mjs';
+import rhReadingRoutes from './routes/rhReadingRoutes.mjs';
 
 // Set the port
 const PORT = process.env.PORT || 3500
@@ -57,6 +58,7 @@ app.use('/notes', noteRoutes)
 app.use('/vessels', vesselRoutes)
 app.use('/positions', positionRoutes)
 app.use('/dhmachines', dhMachineRoutes)
+app.use('/rhreadings', rhReadingRoutes)
 
 // Error handling for 404 (Not Found)
 app.all('*', (req, res) => {
