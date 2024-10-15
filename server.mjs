@@ -28,6 +28,7 @@ import positionRoutes from './routes/positionRoutes.mjs';
 import dhMachineRoutes from './routes/dhMachineRoutes.mjs';
 import rhReadingRoutes from './routes/rhReadingRoutes.mjs';
 import fuelRoutes from './routes/fuelRoutes.mjs';
+import dutyRoutes from './routes/dutyRoutes.mjs';
 
 // Set the port
 const PORT = process.env.PORT || 3500
@@ -61,6 +62,7 @@ app.use('/positions', positionRoutes)
 app.use('/dhmachines', dhMachineRoutes)
 app.use('/rhreadings', rhReadingRoutes)
 app.use('/fuels', fuelRoutes)
+app.use('/duties', dutyRoutes)
 
 // Error handling for 404 (Not Found)
 app.all('*', (req, res) => {
