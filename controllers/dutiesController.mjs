@@ -10,34 +10,42 @@ const getAllDuties = async (req, res) => {
 
     try {
         if (date) {
-            // If a date is provided, filter duties by that date
             duties = await Duty.find({ date })
-                .populate('vessel', 'name') // Populate vessel information
+                .populate({
+                    path: 'vessel',
+                    populate: { path: 'user', select: 'username' } // Populate user to get owner username
+                })
                 .populate('duties.user', 'username roles') // Populate user reference to show username and roles
                 .lean();
         } else {
-            // If no date is specified, fetch all duties
             duties = await Duty.find()
-                .populate('vessel', 'name') // Populate vessel information
+                .populate({
+                    path: 'vessel',
+                    populate: { path: 'user', select: 'username' } // Populate user to get owner username
+                })
                 .populate('duties.user', 'username roles') // Populate user reference to show username and roles
                 .lean();
         }
 
-        // If no duties found
+        // Check if duties were found
         if (!duties?.length) {
             return res.status(400).json({ message: 'No duties found' });
         }
 
         // Log duties for debugging
-        console.log(JSON.stringify(duties, null, 2));
+        duties.forEach(duty => {
+            const vesselOwner = duty.vessel.user; // Access the vessel owner
+            console.log('Vessel Owner:', vesselOwner); // Log the vessel owner
+        });
 
         res.json(duties);
-
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error while fetching duties' });
     }
 };
+
+
 
 // @desc Create a new duty
 // @route POST /duties
