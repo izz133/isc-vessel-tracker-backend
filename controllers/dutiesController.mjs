@@ -35,7 +35,6 @@ const getAllDuties = async (req, res) => {
         // Log duties for debugging
         duties.forEach(duty => {
             const vesselOwner = duty.vessel.user; // Access the vessel owner
-            console.log('Vessel Owner:', vesselOwner); // Log the vessel owner
         });
 
         res.json(duties);
