@@ -19,11 +19,11 @@ const positionSchema = new mongoose.Schema(
             },
             lat: {
                 type: Number,
-                required: true
+                required: null
             },
             long: {
                 type: Number,
-                required: true
+                required: null
             }
         }]
     }

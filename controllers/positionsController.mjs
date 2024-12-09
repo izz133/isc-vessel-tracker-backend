@@ -45,7 +45,7 @@ const createNewPosition = async (req, res) => {
     const { vessel, date, positions } = req.body
 
     // Confirm data
-    if (!vessel || !date || !positions || positions.length !== 4) {
+    if (!vessel || !date || (positions && positions.length < 1)) {
         return res.status(400).json({ message: 'All fields are required and must include 4 position entries' })
     }
 
@@ -73,7 +73,7 @@ const updatePosition = async (req, res) => {
     const { id, vessel, date, positions } = req.body
 
     // Confirm data
-    if (!id || !vessel || !date || !positions || positions.length !== 4) {
+    if (!id || !vessel || !date || (positions && positions.length < 1)) {
         return res.status(400).json({ message: 'All fields are required and must include 4 position entries' })
     }
 
